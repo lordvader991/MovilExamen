@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680602701007",
+    "project_id": "proyecto-30018",
+    "storage_bucket": "proyecto-30018.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680602701007:android:36b92ddf145f3d199abbba",
+        "android_client_info": {
+          "package_name": "com.example.practico_postips"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfCclYZCNjQMzOsMbte7zpedSq003xkZE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
