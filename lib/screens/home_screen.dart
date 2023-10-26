@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:practico_postips/screens/note_editor.dart';
+import 'package:practico_postips/screens/note_reader.dart';
 import 'package:practico_postips/style/app_style.dart';
 import 'package:practico_postips/widgets/note_card.dart';
 
@@ -41,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen>{
                         ),
                         Expanded(
                           child: StreamBuilder<QuerySnapshot>(
-                              stream: FirebaseFirestore.instance.collection("Notes").snapshots(),
+                              stream: FirebaseFirestore.instance.collection("notes").snapshots(),
                               builder: (context, AsyncSnapshot<QuerySnapshot> snapshot){
                                   if(snapshot.connectionState == ConnectionState.waiting){
                                       return  Center(
@@ -52,7 +54,13 @@ class _HomeScreenState extends State<HomeScreen>{
                                       return GridView(
                                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 2),
-                                      children: snapshot.data!.docs.map((note) => noteCard(() {}, note)).toList()
+                                      children: snapshot.data!.docs.map((note) => noteCard(() {
+                                        Navigator.push(context,
+                                        MaterialPageRoute(
+                                            builder:(context) =>
+                                                NoteReaderScreen(note),
+                                            ));
+                                      }, note)).toList()
                                       );
                                   }
                               return Text ("No hay Postips",
@@ -63,6 +71,15 @@ class _HomeScreenState extends State<HomeScreen>{
                         )
                     ],
                 ),
+            ),
+            //aqui va el boton
+            floatingActionButton: FloatingActionButton.extended(
+                onPressed: (){
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) =>NoteEditorScreen()));
+                },
+                label: Text("Agregar Postip"),
+                icon: Icon(Icons.add),
             ),
         );
     }
