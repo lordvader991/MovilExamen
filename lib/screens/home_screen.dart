@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget{
 }
 
 class _HomeScreenState extends State<HomeScreen>{
+    int _currentIndex = 0;
     @override
     Widget build(BuildContext context){
         return Scaffold(
@@ -81,6 +82,35 @@ class _HomeScreenState extends State<HomeScreen>{
                 label: Text("Agregar Postip"),
                 icon: Icon(Icons.add),
             ),
-        );
-    }
+            bottomNavigationBar: BottomNavigationBar(
+                    backgroundColor: AppStyle.mainColor,
+                    currentIndex: _currentIndex,
+                    onTap: (index) {
+                    setState(() {
+                        _currentIndex = index;
+                        if (_currentIndex == 0) {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                        }
+                    });
+                    },
+                    items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.event_note_outlined),
+                        activeIcon: Icon(Icons.event_note),
+                        label: "Mis Postips",
+                        backgroundColor: AppStyle.accentColor,
+                    ),
+                    BottomNavigationBarItem(
+                        icon: Icon(Icons.add_alert_outlined),
+                        activeIcon: Icon(Icons.add_alert),
+                        label: 'Recordatorios',
+                        backgroundColor: AppStyle.accentColor,
+          ),
+        ],
+      ),
+    );
+  }
 }

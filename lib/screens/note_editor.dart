@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:practico_postips/style/app_style.dart';
 
@@ -61,7 +63,21 @@ class _NoteEditorScreenState extends State<NoteEditorScreen>{
                   ],
               ),
             ),
-
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: AppStyle.accentColor,
+              onPressed: ()async{
+                FirebaseFirestore.instance.collection("notes").add({
+                  "note_title":_titleController.text,
+                  "creation_date":date,
+                  "note_content":_mainController.text,
+                  "color_id": color_id
+                }).then((value) {
+                  print(value.id);
+                  Navigator.pop(context);
+                }).catchError((error) =>print("Error al agregar nuevo Postip $error"));
+              },
+              child: Icon(Icons.save),
+            ),
         );
     }
 }
