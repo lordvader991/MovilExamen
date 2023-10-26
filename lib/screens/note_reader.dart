@@ -28,7 +28,7 @@ class _NoteReaderScreenState extends State<NoteReaderScreen>{
                           SizedBox(
                               height: 4.0,
                           ),
-                          Text(widget.doc["creation_date"],style: AppStyle.dateTitle,),
+                          Text(widget.doc["creation_date"],style: AppStyle.dateTitle, overflow: TextOverflow.ellipsis,),
                            SizedBox(
                               height: 28.0,
                           ),
