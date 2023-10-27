@@ -5,79 +5,81 @@ import 'package:flutter/material.dart';
 import 'package:practico_postips/style/app_style.dart';
 
 class NoteEditorScreen extends StatefulWidget{
-    const NoteEditorScreen({Key? key}) : super(key: key);
+        const NoteEditorScreen({Key? key}) : super(key: key);
 
-    @override
-    State<NoteEditorScreen> createState() => _NoteEditorScreenState();
+        @override
+        State<NoteEditorScreen> createState() => _NoteEditorScreenState();
 }
 class _NoteEditorScreenState extends State<NoteEditorScreen>{
-    int color_id = Random().nextInt(AppStyle.cardsColor.length);
-    String date = DateTime.now().toString();
-    TextEditingController _titleController = TextEditingController();
-    TextEditingController _mainController = TextEditingController();
+        int color_id = Random().nextInt(AppStyle.cardsColor.length);
+        String date = DateTime.now().toString();
+        TextEditingController _titleController = TextEditingController();
+        TextEditingController _mainController = TextEditingController();
 
-    @override
-    Widget build(BuildContext context){
+        @override
+        Widget build(BuildContext context){
 
-        return Scaffold(
-            backgroundColor: AppStyle.cardsColor[color_id],
-            appBar: AppBar(
-                backgroundColor: AppStyle.cardsColor[color_id],
-                elevation:  0.0,
-                iconTheme: IconThemeData(color: Colors.black),
-                title: Text("Agregar nuevo Postip", style:
-                TextStyle(
-                    color: Colors.black),
-                ),
-            ),
-            body: Padding(
-                padding: EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextField(
-                        controller: _titleController,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Titulo',
+                return Scaffold(
+                        backgroundColor: AppStyle.cardsColor[color_id],
+                        appBar: AppBar(
+                                backgroundColor: AppStyle.cardsColor[color_id],
+                                elevation:  0.0,
+                                iconTheme: IconThemeData(color: Colors.black),
+                                title: Text("Agregar nuevo Postip", style:
+                                TextStyle(
+                                        color: Colors.black),
+                                ),
                         ),
-                        style: AppStyle.mainTitle,
-                    ),
-                    SizedBox(
-                        height: 8.0,
-                    ),
-                    Text(date, style: AppStyle.dateTitle,),
-                    SizedBox(
-                        height: 28.0,
-                    ),
-                    TextField(
-                        controller: _mainController,
-                        keyboardType: TextInputType.multiline,
-                        maxLines: null,
-                        decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Contenido',
+                        body: SingleChildScrollView(
+                            child: Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                            TextField(
+                                                    controller: _titleController,
+                                                    decoration: InputDecoration(
+                                                            border: InputBorder.none,
+                                                            hintText: 'Titulo',
+                                                    ),
+                                                    style: AppStyle.mainTitle,
+                                            ),
+                                            SizedBox(
+                                                    height: 8.0,
+                                            ),
+                                            Text(date, style: AppStyle.dateTitle,),
+                                            SizedBox(
+                                                    height: 28.0,
+                                            ),
+                                            TextField(
+                                                    controller: _mainController,
+                                                    keyboardType: TextInputType.multiline,
+                                                    maxLines: null,
+                                                    decoration: InputDecoration(
+                                                            border: InputBorder.none,
+                                                            hintText: 'Contenido',
+                                                    ),
+                                                    style: AppStyle.mainContent,
+                                            ),
+                                        ],
+                                ),
+                            ),
                         ),
-                        style: AppStyle.mainContent,
-                    ),
-                  ],
-              ),
-            ),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: AppStyle.accentColor,
-              onPressed: ()async{
-                FirebaseFirestore.instance.collection("notes").add({
-                  "note_title":_titleController.text,
-                  "creation_date":date,
-                  "note_content":_mainController.text,
-                  "color_id": color_id
-                }).then((value) {
-                  print(value.id);
-                  Navigator.pop(context);
-                }).catchError((error) =>print("Error al agregar nuevo Postip $error"));
-              },
-              child: Icon(Icons.save),
-            ),
-        );
-    }
+                        floatingActionButton: FloatingActionButton(
+                            backgroundColor: AppStyle.accentColor,
+                            onPressed: ()async{
+                                FirebaseFirestore.instance.collection("notes").add({
+                                    "note_title":_titleController.text,
+                                    "creation_date":date,
+                                    "note_content":_mainController.text,
+                                    "color_id": color_id
+                                }).then((value) {
+                                    print(value.id);
+                                    Navigator.pop(context);
+                                }).catchError((error) =>print("Error al agregar nuevo Postip $error"));
+                            },
+                            child: Icon(Icons.save),
+                        ),
+                );
+        }
 }

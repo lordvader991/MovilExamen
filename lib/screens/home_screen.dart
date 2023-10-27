@@ -35,63 +35,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 backgroundColor: AppStyle.mainColor,
             ),
             body: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                        Text(
-                            "Mis Postips Recientes",
-                            style: GoogleFonts.roboto(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22,
-                            ),
-                        ),
-                        const SizedBox(
-                            height: 20.0,
-                        ),
-                        Expanded(
-                            child: StreamBuilder<QuerySnapshot>(
-                                stream: FirebaseFirestore.instance.collection("notes").snapshots(),
-                                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
-                                        return Center(
-                                            child: CircularProgressIndicator(),
-                                        );
-                                    }
-                                    if (snapshot.hasData) {
-                                        return GridView(
-                                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                crossAxisCount: 2,
-                                            ),
-                                            children: snapshot.data!.docs.map((note) => noteCard(
-                                                context,
-                                                () {
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                      Text(
+                          "Mis Postips Recientes",
+                          style: GoogleFonts.roboto(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 22,
+                          ),
+                      ),
+                      const SizedBox(
+                          height: 20.0,
+                      ),
+                      Expanded(
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance.collection("notes").snapshots(),
+                              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return Center(
+                                          child: CircularProgressIndicator(),
+                                      );
+                                  }
+                                  if (snapshot.hasData) {
+                                      return GridView(
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                          ),
+                                          children: snapshot.data!.docs.map((note) => noteCard(
+                                              context,
+                                              () {
 
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) => NoteReaderScreen(note),
-                                                        ),
-                                                    );
-                                                },
-                                                note,
-                                                _deleteNote,
-                                            )).toList(),
-                                        );
-                                    }
-                                    return Text(
-                                        "No hay Postips",
-                                        style: GoogleFonts.nunito(
-                                            color: Colors.white,
-                                        ),
-                                    );
-                                },
-                            ),
-                        ),
-                    ],
-                ),
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => NoteReaderScreen(note),
+                                                      ),
+                                                  );
+                                              },
+                                              note,
+                                              _deleteNote,
+                                          )).toList(),
+                                      );
+                                  }
+                                  return Text(
+                                      "No hay Postips",
+                                      style: GoogleFonts.nunito(
+                                          color: Colors.white,
+                                      ),
+                                  );
+                              },
+                          ),
+                      ),
+                  ],
+              ),
             ),
             floatingActionButton: FloatingActionButton.extended(
                 onPressed: () {

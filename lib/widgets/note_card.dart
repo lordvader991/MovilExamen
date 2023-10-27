@@ -59,6 +59,8 @@ Widget noteCard(BuildContext context, Function()? onTap, QueryDocumentSnapshot d
                     Text(
                         doc["note_content"],
                         style: AppStyle.mainContent,
+                        overflow: TextOverflow.ellipsis,
+
                     ),
                 ],
             ),
