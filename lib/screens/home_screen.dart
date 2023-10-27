@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:practico_postips/screens/note_editor.dart';
 import 'package:practico_postips/screens/note_reader.dart';
-import 'package:practico_postips/screens/todo_screen.dart';
 import 'package:practico_postips/style/app_style.dart';
+import 'package:practico_postips/todo/todo_screen.dart';
 import 'package:practico_postips/widgets/note_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -68,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: snapshot.data!.docs.map((note) => noteCard(
                                                 context,
                                                 () {
+
                                                     Navigator.push(
                                                         context,
                                                         MaterialPageRoute(
