@@ -4,16 +4,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:practico_postips/todo/constants/app_style.dart';
+import 'package:practico_postips/todo/model/todo_model.dart';
 import 'package:practico_postips/todo/provider/date_time_provider.dart';
 import 'package:practico_postips/todo/provider/radio_provider.dart';
+import 'package:practico_postips/todo/provider/service_provider.dart';
 import 'package:practico_postips/todo/widget/date_time_widget.dart';
 import 'package:practico_postips/todo/widget/radio_widget.dart';
 import 'package:practico_postips/todo/widget/textfield_widget.dart';
 
 class AddNewTaskModel extends ConsumerWidget {
-    const AddNewTaskModel({
-        super.key,
-    });
+    AddNewTaskModel({
+        Key? key,
+    }) : super(key: key);
+
+    final titleController = TextEditingController();
+    final descriptionController = TextEditingController();
 
     @override
     Widget build(BuildContext context, WidgetRef ref) {
@@ -52,16 +57,22 @@ class AddNewTaskModel extends ConsumerWidget {
                             style: AppStyle.headingOne,
                         ),
                         const Gap(6),
-                        const TextFieldWidget(
-                                maxLine: 1, hintText: 'Escribe el título del Recordatorio'),
+                        TextFieldWidget(
+                            maxLine: 1,
+                            hintText: 'Escribe el título del Recordatorio',
+                            txtController: titleController,
+                        ),
                         const Gap(12),
                         const Text(
                             'Descripción del recordatorio',
                             style: AppStyle.headingOne,
                         ),
                         const Gap(6),
-                        const TextFieldWidget(
-                                maxLine: 5, hintText: 'Escribe la descripción del recordatorio'),
+                        TextFieldWidget(
+                            maxLine: 5,
+                            hintText: 'Escribe la descripción del recordatorio',
+                            txtController: descriptionController,
+                        ),
                         const Gap(12),
                         const Text(
                             'Categría del recordatorio',
@@ -74,8 +85,7 @@ class AddNewTaskModel extends ConsumerWidget {
                                         cateColor: Colors.green,
                                         titleRadio: 'LRN',
                                         valueInput: 1,
-                                        onChangedValue: () => ref.read(radioProvider.notifier).update
-                                        ((state) =>1),
+                                        onChangedValue: () => ref.read(radioProvider.notifier).update((state) => 1),
                                     ),
                                 ),
                                 Expanded(
@@ -83,8 +93,7 @@ class AddNewTaskModel extends ConsumerWidget {
                                         cateColor: Colors.blue.shade700,
                                         titleRadio: 'WORK',
                                         valueInput: 2,
-                                        onChangedValue: () => ref.read(radioProvider.notifier).update
-                                        ((state) =>2),
+                                        onChangedValue: () => ref.read(radioProvider.notifier).update((state) => 2),
                                     ),
                                 ),
                                 Expanded(
@@ -92,8 +101,7 @@ class AddNewTaskModel extends ConsumerWidget {
                                         cateColor: Colors.amberAccent.shade700,
                                         titleRadio: 'GEN',
                                         valueInput: 3,
-                                        onChangedValue: () => ref.read(radioProvider.notifier).update
-                                        ((state) =>3),
+                                        onChangedValue: () => ref.read(radioProvider.notifier).update((state) => 3),
                                     ),
                                 ),
                             ],
@@ -107,15 +115,13 @@ class AddNewTaskModel extends ConsumerWidget {
                                     iconSection: CupertinoIcons.calendar,
                                     onTap: () async {
                                         final getValue = await showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime(2021),
-                                        lastDate: DateTime(2025));
-                                        if(getValue != null){
+                                                context: context,
+                                                initialDate: DateTime.now(),
+                                                firstDate: DateTime(2021),
+                                                lastDate: DateTime(2025));
+                                        if (getValue != null) {
                                             final format = DateFormat.yMd();
-                                            ref
-                                            .read(dateProvider.notifier).update((state) =>
-                                            format.format(getValue));
+                                            ref.read(dateProvider.notifier).update((state) => format.format(getValue));
                                         }
                                     },
                                 ),
@@ -124,19 +130,13 @@ class AddNewTaskModel extends ConsumerWidget {
                                     titleText: 'Hora',
                                     valueText: ref.watch(timeProvider),
                                     iconSection: CupertinoIcons.clock,
-                                        onTap: () async{
-                                            final getTime =
-                                            await showTimePicker(
-                                            context: context,
-                                            initialTime: TimeOfDay.now());
+                                    onTap: () async {
+                                        final getTime = await showTimePicker(context: context, initialTime: TimeOfDay.now());
 
-                                            if(getTime != null){
-                                                ref.
-                                                read(timeProvider.notifier).
-                                                update((state) =>getTime.format(context));
-                                            }
-                                        },
-
+                                        if (getTime != null) {
+                                            ref.read(timeProvider.notifier).update((state) => getTime.format(context));
+                                        }
+                                    },
                                 ),
                             ],
                         ),
@@ -154,7 +154,7 @@ class AddNewTaskModel extends ConsumerWidget {
                                             ),
                                             padding: const EdgeInsets.symmetric(vertical: 14),
                                         ),
-                                        onPressed: () =>Navigator.pop(context),
+                                        onPressed: () => Navigator.pop(context),
                                         child: Text('Cancelar'),
                                     ),
                                 ),
@@ -170,7 +170,34 @@ class AddNewTaskModel extends ConsumerWidget {
                                             ),
                                             padding: const EdgeInsets.symmetric(vertical: 14),
                                         ),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                            final getRAdioValue = ref.watch(radioProvider);
+                                            String category = '';
+                                            switch (getRAdioValue) {
+                                                case 1:
+                                                    category = 'Learning';
+                                                    break;
+                                                case 2:
+                                                    category = 'Working';
+                                                    break;
+                                                case 3:
+                                                    category = 'General';
+                                                    break;
+                                            }
+
+                                            ref.read(serviceProvider).addNewTask(TodoModel(
+                                                    titleTask: titleController.text,
+                                                    description: descriptionController.text,
+                                                    category: category,
+                                                    dateTask: ref.read(dateProvider),
+                                                    timeTask: ref.read(timeProvider),
+                                                    isDone: false,));
+                                            print('data guardado');
+                                            titleController.clear();
+                                            descriptionController.clear();
+                                            ref.read(radioProvider.notifier).update((state) => 0);
+                                            Navigator.pop(context);
+                                        },
                                         child: Text('Crear'),
                                     ),
                                 ),
@@ -182,8 +209,6 @@ class AddNewTaskModel extends ConsumerWidget {
         );
     }
 }
-
-
 
 
 
